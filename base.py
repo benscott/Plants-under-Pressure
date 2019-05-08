@@ -1,3 +1,4 @@
+import configparser
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -5,9 +6,10 @@ from sqlalchemy import Column, Integer, String
 
 
 with open('auth.txt', 'r') as f:
-    PWD, USR, DB = f.read().splitlines()
+    PWD, USR, DB, HOST = f.read().splitlines()
 
-SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{USR}:{PWD}@{DB}?charset=utf8"
+SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{USR}:{PWD}@{HOST}/{DB}?charset=utf8"
+
 
 # Create session
 engine = create_engine(SQLALCHEMY_DATABASE_URI)
@@ -47,3 +49,9 @@ class TraitPage(Base):
         return self.trait_page_id, self.page_id, self.trait_id
 
 
+class TraitView(Base):
+
+    __tablename__ = 'vw_trait_sp_pg'
+    __table_args__ = {'autoload': True}
+
+    page_id = Column(Integer, primary_key=True)
