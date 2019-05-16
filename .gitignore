@@ -4,7 +4,7 @@
 ### JupyterNotebook ###
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
-*.ipynb
+#*.ipynb
 
 # Remove previous ipynb_checkpoints
 #   git rm -r .ipynb_checkpoints/
@@ -220,3 +220,5 @@ dmypy.json
 config.ini
 
 # End of https://www.gitignore.io/api/python,pycharm,jupyternotebook
+
+.DS_Store
