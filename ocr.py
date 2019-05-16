@@ -20,3 +20,11 @@ class OCR(object):
     @property
     def text(self):
         return pytesseract.image_to_string(self.image())
+
+    @property
+    def data(self):
+        return pytesseract.image_to_data(self.image())
+
+    @property
+    def hocr(self):
+        return pytesseract.image_to_pdf_or_hocr(self.image(), extension='hocr')
