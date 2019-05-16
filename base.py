@@ -55,3 +55,15 @@ class TraitView(Base):
     __table_args__ = {'autoload': True}
 
     page_id = Column(Integer, primary_key=True)
+
+
+class Proximity(Base):
+
+    __tablename__ = 'proximity'
+
+    proximity_id = Column(Integer, primary_key=True)
+    citation_id = Column(Integer)
+    trait_id = Column(Integer)
+    page_id = Column(Integer)
+    pup_id = Column(Integer)
+    char_distance = Column(Integer)
