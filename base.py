@@ -67,3 +67,5 @@ class Proximity(Base):
     page_id = Column(Integer)
     pup_id = Column(Integer)
     char_distance = Column(Integer)
+    trait_indexes = Column(String)
+    taxon_indexes = Column(String)

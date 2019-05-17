@@ -1,3 +1,4 @@
+import logging
 import pandas as pd
 import datetime
 from sqlalchemy import and_, exists
@@ -11,6 +12,9 @@ start = datetime.datetime.now()
 print(f"start time: {start}")
 
 session = Session()
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 def remove_line_breaks(text):
@@ -44,6 +48,8 @@ for row in session.query(TraitView).filter(
     )
 ).limit(1):
 
+    logger.info('OCRing %s', row.image_url)
+
     ocr = OCR(row.image_url)
     ocr_text = remove_line_breaks(ocr.text)
 
@@ -58,21 +64,22 @@ for row in session.query(TraitView).filter(
     trait_indexes = find_occurences_of_string(ocr_text, row.trait_term)
     taxon_indexes = find_occurences_of_string(ocr_text, taxon_name)
 
+    print(taxon_indexes)
+
     if trait_indexes and taxon_indexes:
         char_distance = find_smallest_distance(trait_indexes, taxon_indexes)
     else:
         # Trait or taxon cannot be found in the text
         char_distance = -1
 
-    print(row.page_id)
-    print(char_distance)
-
     proximity = Proximity(
         citation_id=row.citation_id,
         trait_id=row.trait_id,
         page_id=row.page_id,
         pup_id=row.pup_name_id,
-        char_distance=char_distance
+        char_distance=char_distance,
+        taxon_indexes=','.join(map(str, taxon_indexes)),
+        trait_indexes=','.join(map(str, trait_indexes)),
     )
 
     session.add(proximity)
